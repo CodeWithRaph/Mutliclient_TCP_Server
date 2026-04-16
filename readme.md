@@ -39,7 +39,7 @@ subgraph TCP Client 2
 
     Connect2(["client(#quot;192.168.0.50#quot;, 8080);"])
 
-    TCP2["TCP exchanges failed"]
+    TCP2["TCP exchanges successfull"]
 end
 
 subgraph TCP Server
