@@ -54,8 +54,8 @@ Connect <--> Socket
 Socket <--> Connect2
 
 
-TCP <-->
-Socket x--x TCP2
+TCP <==>
+Socket x==x TCP2
 
 ```
 
@@ -65,3 +65,66 @@ Clients connect one by one to the main socket.<br>
 This socket listens for incoming client/server connections, then redirects each client to a dedicated thread.<br>
 This allows each client to maintain its own individual socket connection.<br>
 As a result, there are no inter-client conflicts with this approach.<br>
+
+```mermaid
+---
+Title: TCP Client example
+---
+flowchart LR
+
+
+subgraph TCP Client
+    direction TB
+    Config["`IP: 192.168.0.10
+    `"]
+
+    Connect(["client(#quot;192.168.0.50#quot;, 8080);"])
+
+    TCP["TCP exchanges successfull"]
+end
+
+subgraph TCP Client 2
+    direction TB
+    Config2["`IP: 192.168.0.11
+    `"]
+
+    Connect2(["client(#quot;192.168.0.50#quot;, 8080);"])
+
+    TCP2["TCP exchanges failed"]
+end
+
+subgraph TCP Server
+    direction TB
+    Config_Server["`IP: 192.168.0.50
+    Port: 8080
+    `"]
+    subgraph Main Socket
+        Socket["Socket"]
+        Queue["`Queue:
+        Client 1
+        Client 2
+        `"]
+    end
+
+    subgraph Threads
+        direction TB
+        subgraph Thread 1
+            Socket1["Socket 1"]
+        end
+
+        subgraph Thread 2
+            Socket2["Socket 2"]
+        end
+    end
+end
+
+Connect -- Client 1 | Step 1 --> Socket
+Connect2 -- Client 2 | Step 1 --> Socket
+
+Socket -- Client 1 | Step 2 --> Socket1
+Socket -- Client 2 | Step 2 --> Socket2
+
+TCP <== Client 1 | Step 3 ==> Socket1
+TCP2 <== Client 2 | Step 3 ==> Socket2 
+
+```
