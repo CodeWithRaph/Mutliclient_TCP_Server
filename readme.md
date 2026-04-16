@@ -17,6 +17,48 @@ The client connects to the socket.<br>
 It can send messages as long as the socket remains open.<br>
 A limitation of this architecture is that issues arise when attempting to connect multiple clients simultaneously.<br>
 
+```mermaid
+---
+Title: TCP Client example
+---
+flowchart LR
+
+
+subgraph TCP Client
+    Config["`IP: 192.168.0.10
+    `"]
+
+    Connect(["client(#quot;192.168.0.50#quot;, 8080);"])
+
+    TCP["TCP exchanges successfull"]
+end
+
+subgraph TCP Client 2
+    Config2["`IP: 192.168.0.11
+    `"]
+
+    Connect2(["client(#quot;192.168.0.50#quot;, 8080);"])
+
+    TCP2["TCP exchanges failed"]
+end
+
+subgraph TCP Server
+    Config_Server["`IP: 192.168.0.50
+    Port: 8080
+    `"]
+
+    Socket
+end
+
+Connect <--> Socket
+Socket <--> Connect2
+
+
+TCP <-->
+Socket x--x TCP2
+
+```
+
 ## Multiclient
 
 Clients connect one by one to the main socket.<br>
