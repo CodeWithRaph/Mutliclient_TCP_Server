@@ -19,7 +19,7 @@ TCPServer::TCPServer(int port) {
     if (bind(server_fd, (struct sockaddr*)&address, sizeof(address)) < 0) {
         perror("Attribution échouée");
         exit(1);
-    }  
+    }
 
     // Ecoute sur le port
     int ret;
@@ -54,6 +54,13 @@ void TCPServer::receiveLoop(int client_socket, sockaddr_in client_addr) {
 
         buffer[n] = '\0';
         std::cout << "Message reçu : " << buffer << std::endl;
+
+        // Réponse "ok" au client
+        const char* ok = "ok\n";
+        if (send(client_socket, ok, 3, 0) < 0) {
+            std::cerr << "Erreur send()" << std::endl;
+            break;
+        }
     }
 
     close(client_socket);
