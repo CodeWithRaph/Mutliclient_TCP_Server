@@ -1,6 +1,9 @@
 #ifndef SERVER_TCP_HPP
 #define SERVER_TCP_HPP
 
+#include <cstring>
+#include <arpa/inet.h>
+
 /**
  * @brief Serveur TCP simple multi-client
  */
